@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Wind zwischen Hoch und Tief</title>
+<style>
+/* ===== Einheitlicher Stil für alle Arbeitsblätter =====
+   Kopfleiste, Schrift und Farbcodes wie im Strukturformel-Zeichner.
+   Farbcode:  INFO = blau (Balken links) | INTERAKTIV = grün (gestrichelt) | AUFGABE/FRAGE = orange (dicker Rahmen)
+   Zusätzlich unterscheiden sich Rahmenform und Beschriftung, damit es auch im Schwarzweißdruck funktioniert. */
+:root{
+  --paper:#e8edf1; --ink:#13243b; --mut:#56677c; --rule:#c5d1dc;
+  --info:#1f5fbf; --info-bg:#e6effb;
+  --live:#1b7f4b; --live-bg:#e5f4ec;
+  --task:#e4572e; --task-bg:#fdf1ec;
+  --hint:#9a5b00; --hint-bg:#fdf6e4;
+  /* Piktogramme (eigene Vektorgrafiken, direkt eingebettet) */
+  --ic-info:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M5 11c6-3 13-3 19 1v27c-6-4-13-4-19-1z' fill='%231f5fbf'/%3E%3Cpath d='M43 11c-6-3-13-3-19 1v27c6-4 13-4 19-1z' fill='%236f9be0'/%3E%3Cg stroke='white' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M10 18c3-1 6-1 9 0M10 24c3-1 6-1 9 0M10 30c3-1 6-1 9 0M29 18c3-1 6-1 9 0M29 24c3-1 6-1 9 0M29 30c3-1 6-1 9 0'/%3E%3C/g%3E%3C/svg%3E");
+  --ic-live:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath d='M14 8v29l8-7 6 12 6-3-6-12h11z' fill='%231b7f4b' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3Cg stroke='%231b7f4b' stroke-width='3' stroke-linecap='round' fill='none'%3E%3Cpath d='M9 6L6 3M16 4V0M7 14H3'/%3E%3C/g%3E%3C/svg%3E");
+  --ic-task:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cg transform='rotate(45 24 24)'%3E%3Crect x='18' y='4' width='12' height='7' rx='3' fill='%23f28ea0'/%3E%3Crect x='18' y='11' width='12' height='4' fill='%23b8c2cc'/%3E%3Crect x='18' y='15' width='12' height='18' fill='%23e4572e'/%3E%3Cpath d='M18 33h12l-6 11z' fill='%23f6c177'/%3E%3Cpath d='M22 40h4l-2 4z' fill='%2313243b'/%3E%3C/g%3E%3C/svg%3E");
+  --ic-q:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect x='5' y='5' width='38' height='29' rx='9' fill='%23e4572e'/%3E%3Cpath d='M13 34v9l11-9z' fill='%23e4572e'/%3E%3Cpath d='M18 18c0-4 3-6 6-6s6 2 6 5c0 4-6 4-6 8' fill='none' stroke='white' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='24' cy='28' r='2.6' fill='white'/%3E%3C/svg%3E");
+  --ic-hint:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='20' r='13' fill='%23f2c14e'/%3E%3Cpath d='M18 30h12l-2 7h-8z' fill='%23f2c14e'/%3E%3Crect x='18' y='36' width='12' height='4' rx='2' fill='%239a5b00'/%3E%3Crect x='20' y='41' width='8' height='3' rx='1.5' fill='%239a5b00'/%3E%3Cpath d='M18 18c1-4 4-6 7-6' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--info);outline-offset:2px}
+
+/* ---- Kopfleiste ---- */
+header.top{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem 1.6rem;padding:.7rem 1.1rem;background:var(--ink);color:#fff}
+.logo{display:block;height:48px;width:auto;background:#fff;border-radius:6px;padding:4px 8px}
+.brand h1{margin:0;font-size:1.25rem;letter-spacing:.01em}
+.brand p{margin:0;font-size:.84rem;color:#b9c8da}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.3rem}
+.chip{background:#eef3f9;color:var(--ink);border-radius:8px;padding:.1rem .6rem;font-size:.8rem;font-weight:600}
+.ident{display:flex;flex-wrap:wrap;gap:.5rem;margin-left:auto;max-width:34rem}
+.fld{display:flex;flex-direction:column;background:#eef3f9;color:var(--ink);border-radius:10px;padding:.2rem .6rem .3rem;min-width:7.5rem}
+.fld.w{flex:1 1 11rem}
+.fld span{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+.fld input{background:transparent;border:0;border-bottom:1px solid #b3c0cd;color:var(--ink);width:100%;padding:.05rem .1rem;outline-offset:3px}
+
+main{max-width:880px;margin:0 auto;padding:1rem 1rem 4rem;counter-reset:aufg}
+h2{font-size:1.1rem;margin:1.6rem 0 .2rem;color:var(--ink)}
+p{margin:.3rem 0}
+
+/* ---- Legende ---- */
+.legend{display:flex;flex-wrap:wrap;gap:.5rem 1rem;font-size:.82rem;background:#fff;border:1px solid var(--rule);border-radius:8px;padding:.5rem .8rem;align-items:center}
+.legend b{margin-right:.2rem}
+.lg{display:inline-block;width:30px;height:30px;vertical-align:-.55rem;margin-right:.35rem;border-radius:50%;border:2.5px solid;background:#fff center/62% no-repeat}
+.lg.i{border-color:var(--info);background-image:var(--ic-info)}
+.lg.l{border-color:var(--live);border-style:dashed;background-image:var(--ic-live)}
+.lg.t{border-color:var(--task);background-image:var(--ic-task)}
+
+/* ---- Bausteine ---- */
+.box{position:relative;margin:1.3rem 0 1rem;padding:.65rem .9rem .8rem;border-radius:8px}
+.tag{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.1rem .6rem;border-radius:999px;margin:0 0 .35rem 2.2rem;color:#fff}
+/* Piktogramm-Plakette oben links an jedem Baustein */
+.box::before{content:"";position:absolute;top:-18px;left:-14px;width:50px;height:50px;border-radius:50%;background:#fff center/62% no-repeat;border:3px solid;-webkit-print-color-adjust:exact;print-color-adjust:exact;box-shadow:0 2px 5px rgba(19,36,59,.25)}
+.info::before{border-color:var(--info);background-image:var(--ic-info)}
+.live::before{border-color:var(--live);border-style:dashed;background-image:var(--ic-live)}
+.task::before{border-color:var(--task);background-image:var(--ic-task)}
+.task.frage::before{background-image:var(--ic-q)}
+
+/* Infomaterial */
+.info{background:var(--info-bg);border:1.5px solid var(--info);border-left:8px solid var(--info)}
+.info .tag{background:var(--info)}
+.info .tag::before{content:"ℹ INFO"}
+
+/* Interaktives Element */
+.live{background:var(--live-bg);border:2px dashed var(--live)}
+.live .tag{background:var(--live)}
+.live .tag::before{content:"⚙ INTERAKTIV"}
+
+/* Arbeitsauftrag / Frage */
+.task{background:#fff;border:3px solid var(--task);box-shadow:6px 6px 0 var(--task-bg);counter-increment:aufg}
+.task .tag{background:var(--task);font-size:.8rem}
+.task .tag::before{content:"✎ Aufgabe " counter(aufg)}
+.task.frage .tag::before{content:"? Frage " counter(aufg)}
+.task .afb{float:right;font-size:.74rem;color:var(--mut);border:1px solid var(--rule);border-radius:4px;padding:0 .4rem;margin-top:.1rem}
+.task .op{font-weight:700;color:var(--task)}
+.task textarea,.task select,.task input[type=text]{border:1px solid var(--rule);border-radius:5px;padding:.3rem .5rem;background:#fff}
+.task textarea{width:100%;min-height:5.5rem;resize:vertical}
+.opts label{display:block;padding:.15rem 0}
+.btn{border:1.5px solid var(--task);background:#fff;color:var(--task);border-radius:6px;padding:.25rem .8rem;font-weight:600;margin-top:.4rem}
+.btn:hover{background:var(--task-bg)}
+.fb{margin-top:.5rem;font-size:.92rem}
+.fb.ok{color:var(--live);font-weight:600}
+.hint{margin-top:.4rem;background:var(--hint-bg);border-left:5px solid var(--hint);border-radius:4px;padding:.35rem .6rem;font-size:.9rem}
+.hint{display:flow-root}
+.hint::before{content:"Hilfe: ";font-weight:700;color:var(--hint);display:inline-block;padding-left:1.9rem;background:var(--ic-hint) left center/1.6rem no-repeat;min-height:1.6rem;line-height:1.6rem;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+
+button.printbtn{position:fixed;right:1rem;bottom:1rem;z-index:5;border:1px solid var(--rule);background:rgba(255,255,255,.92);color:var(--mut);border-radius:20px;padding:.35rem .9rem;font-size:.82rem}
+button.printbtn:hover{color:var(--ink);border-color:var(--ink)}
+
+@media print{
+  @page{size:A4 portrait;margin:11mm}
+  body{background:#fff;font-size:10.5pt}
+  header.top{background:#fff;color:#000;padding:0 0 3mm;border-bottom:1px solid #000}
+  .brand p{color:#000}
+  .chip,.fld{background:#fff;color:#000;border:1px solid #000;border-radius:8px}
+  .fld span{color:#000}.fld input{color:#000;border-bottom:1px solid #000}
+  .logo{height:13mm;padding:0;border-radius:0}
+  main{padding:0}
+  .printbtn,.btn,.legend .noprint{display:none!important}
+  .box{break-inside:avoid}
+  .info{background:#fff;border:1px solid #000;border-left:6px solid #000}
+  .live{background:#fff;border:2px dashed #000}
+  .task{background:#fff;border:3px double #000;box-shadow:none}
+  .tag{background:#fff!important;color:#000;border:1px solid #000}
+  .task .op{color:#000}
+  .hint{background:#fff;border-left-color:#000}
+  .box::before,.lg,.hint::before{filter:grayscale(1);-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .box::before{border-color:#000;box-shadow:none}
+}
+/* ---- Simulationen ---- */
+.sim canvas{display:block;width:100%;height:auto;background:#fff;border:1px solid var(--rule);border-radius:6px;margin:.4rem 0}
+.stepbar{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem .6rem;margin:.3rem 0}
+.sbtn{border:1.5px solid var(--live);background:#fff;color:var(--live);border-radius:6px;padding:.2rem .75rem;font-weight:600}
+.sbtn:hover,.sbtn.on{background:var(--live);color:#fff}
+.dots{display:inline-flex;gap:.35rem}
+.dots button{width:1.9rem;height:1.9rem;border-radius:50%;border:1.5px solid var(--live);background:#fff;color:var(--live);font-weight:700;padding:0}
+.dots button.on{background:var(--live);color:#fff}
+.stat{background:#fff;border-left:5px solid var(--live);border-radius:4px;padding:.4rem .7rem;font-size:.93rem;min-height:3.2rem}
+.ctrl{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.3rem 1.2rem;margin-top:.5rem}
+.ctrl label{font-size:.88rem;font-weight:600}
+.val{font-weight:700;color:var(--live)}
+.modes{display:flex;flex-wrap:wrap;gap:.2rem 1.2rem;font-size:.92rem;font-weight:600}
+.vleg{display:flex;flex-wrap:wrap;gap:.2rem 1rem;font-size:.8rem;color:var(--mut)}
+.vleg i{display:inline-block;width:18px;height:4px;border-radius:2px;vertical-align:middle;margin-right:.3rem}
+.readout{display:flex;flex-wrap:wrap;gap:.2rem 1.4rem;font-size:.9rem;margin-top:.3rem}
+.chk{font-size:.88rem;font-weight:600}
+.kl{margin:.2rem 0 .3rem;padding-left:1.2rem}
+.kl li{margin:.15rem 0}
+.cG{color:#c0392b}.cC{color:#7b3fb5}.cR{color:#4b5563}
+.small{font-size:.82rem;color:var(--mut)}
+table.zt{border-collapse:collapse;margin:.3rem 0;font-size:.92rem}
+table.zt th,table.zt td{border:1px solid var(--rule);padding:.25rem .55rem;text-align:left}
+table.zt th{background:#f3f6f9}
+@media print{
+  .sbtn,.dots,.modes input{display:none!important}
+  .stat{border-left-color:#000}
+  .sim canvas{border:1px solid #000}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <img class="logo" alt="Logo Dürer-Gymnasium Nürnberg" src="data:image/png;base64,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">
+  <div class="brand"><h1>Wind – Ausgleich zwischen Hoch- und Tiefdruck</h1><div class="chips"><span class="chip">Geographie</span><span class="chip">Jahrgangsstufe 12 · Leistungsfach (eA)</span><span class="chip">Bearbeitungszeit: ca. 15 min</span></div></div>
+  <div class="ident">
+    <label class="fld"><span>Klasse/Kurs</span><input type="text" id="klasse" autocomplete="off" aria-label="Klasse oder Kurs"></label>
+    <label class="fld w"><span>Kennwort</span><input type="text" id="kennwort" autocomplete="off" aria-label="Kennwort (Pseudonym)"></label>
+    <label class="fld"><span>Datum</span><input type="text" id="datum" autocomplete="off" aria-label="Datum"></label>
+  </div>
+</header>
+
+<main>
+  <div class="legend" aria-label="Legende">
+    <b>So erkennst du die Bausteine:</b>
+    <span><i class="lg i"></i>Info zum Lesen</span>
+    <span><i class="lg l"></i>Zum Ausprobieren</span>
+    <span><i class="lg t"></i>Hier musst du etwas tun</span>
+  </div>
+
+  <h2>1 Warum entsteht Wind? – Die thermische Zirkulation</h2>
+
+  <section class="box info">
+    <span class="tag"></span>
+    <p><b>Luftdruck</b> ist die Gewichtskraft der Luftsäule, die auf einer Fläche lastet. Wird die Erdoberfläche unterschiedlich stark erwärmt (z. B. Land und Meer, Äquator und Pol), entstehen Druckunterschiede: <b>thermische Hoch- und Tiefdruckgebiete</b>.</p>
+    <p>Die Atmosphäre gleicht diese Unterschiede aus. <b>Wind</b> ist die horizontale Ausgleichsströmung vom hohen zum tiefen Luftdruck. Daneben gibt es <i>dynamisch</i> entstandene Druckgebilde (durch Konvergenz und Divergenz in der Höhenströmung), die hier nicht betrachtet werden.</p>
+  </section>
+
+  <section class="box live sim">
+    <span class="tag"></span>
+    <p>Gehe die vier Schritte durch und verändere den Temperaturunterschied. <i>(Vertikalschnitt, schematisch, nicht maßstabsgetreu)</i></p>
+    <canvas id="cvV" aria-label="Animation: Vertikalschnitt durch eine thermische Zirkulation zwischen einer kühleren und einer wärmeren Oberfläche"></canvas>
+    <div class="stepbar">
+      <button type="button" class="sbtn" id="v_prev">◀ Zurück</button>
+      <span class="dots" id="v_dots" aria-label="Schritt wählen"></span>
+      <button type="button" class="sbtn" id="v_next">Weiter ▶</button>
+      <button type="button" class="sbtn" id="v_auto">▶ Automatisch</button>
+    </div>
+    <div class="stat" aria-live="polite"><b id="v_title"></b> <span id="v_text"></span></div>
+    <div class="ctrl">
+      <label>Temperaturunterschied ΔT: <span id="v_dtv" class="val"></span>
+        <input type="range" id="v_dt" min="0" max="20" step="1" value="12" aria-label="Temperaturunterschied zwischen den Oberflächen"></label>
+    </div>
+  </section>
+
+  <section class="box task">
+    <span class="tag"></span><span class="afb">AFB I</span>
+    <p><span class="op">Ordne zu:</span> Welche Druckverhältnisse herrschen in Schritt 4?</p>
+    <table class="zt">
+      <tr><th></th><th>am Boden</th><th>in der Höhe</th></tr>
+      <tr><th>über der wärmeren Fläche</th>
+        <td><select id="a1_warm_boden" aria-label="wärmere Fläche, am Boden"><option value="">–</option><option value="H">Hoch</option><option value="T">Tief</option></select></td>
+        <td><select id="a1_warm_hoehe" aria-label="wärmere Fläche, in der Höhe"><option value="">–</option><option value="H">Hoch</option><option value="T">Tief</option></select></td></tr>
+      <tr><th>über der kühleren Fläche</th>
+        <td><select id="a1_kalt_boden" aria-label="kühlere Fläche, am Boden"><option value="">–</option><option value="H">Hoch</option><option value="T">Tief</option></select></td>
+        <td><select id="a1_kalt_hoehe" aria-label="kühlere Fläche, in der Höhe"><option value="">–</option><option value="H">Hoch</option><option value="T">Tief</option></select></td></tr>
+    </table>
+    <div><button type="button" class="btn" data-check="a1">Antwort prüfen</button></div>
+    <div class="fb" id="fb-a1" aria-live="polite"></div>
+  </section>
+
+  <h2>2 Wohin weht der Wind? – Kräfte am Luftpaket</h2>
+
+  <section class="box info">
+    <span class="tag"></span>
+    <p>Bei großräumigen Druckgebilden wirken auf ein Luftpaket drei Kräfte:</p>
+    <ul class="kl">
+      <li><b class="cG">Gradientkraft</b>: wirkt senkrecht zu den Isobaren vom hohen zum tiefen Druck. Je enger die Isobaren, desto stärker ist sie. Sie setzt die Luft in Bewegung.</li>
+      <li><b class="cC">Corioliskraft</b> (ablenkende Kraft der Erdrotation): wirkt senkrecht zur Bewegungsrichtung, auf der Nordhalbkugel nach rechts, auf der Südhalbkugel nach links. Sie wächst mit der Windgeschwindigkeit und der geographischen Breite (∝ v · sin φ) und ist am Äquator null.</li>
+      <li><b class="cR">Reibungskraft</b>: wirkt der Bewegung entgegen. Sie ist nur in der bodennahen Grundschicht (bis ca. 1–1,5 km Höhe) wirksam, über rauem Land stärker als über dem Meer.</li>
+    </ul>
+    <p class="small">Modellannahmen: Kräfte als Beschleunigung je Masseneinheit; die Zentrifugalkraft bei gekrümmten Isobaren wird vernachlässigt.</p>
+  </section>
+
+  <section class="box live sim">
+    <span class="tag"></span>
+    <p>Draufsicht wie auf einer Wetterkarte. Wähle einen Modus, verändere Breite und Reibung und beobachte.</p>
+    <div class="modes" role="radiogroup" aria-label="Darstellungsmodus">
+      <label><input type="radio" name="p_modus" value="einzel" checked> Einzelnes Luftpaket (gerade Isobaren)</label>
+      <label><input type="radio" name="p_modus" value="feld"> Hoch und Tief (viele Luftteilchen)</label>
+    </div>
+    <canvas id="cvP" aria-label="Animation: Bewegung von Luft zwischen Hoch- und Tiefdruck unter Einfluss von Gradientkraft, Corioliskraft und Reibung"></canvas>
+    <div class="vleg" id="p_leg">
+      <span><i style="background:#c0392b"></i>Gradientkraft</span>
+      <span><i style="background:#7b3fb5"></i>Corioliskraft</span>
+      <span><i style="background:#6b7280"></i>Reibungskraft</span>
+      <span><i style="background:#0e7c86"></i>Windrichtung/-geschwindigkeit</span>
+    </div>
+    <div class="stat" aria-live="polite"><span id="p_stat"></span></div>
+    <div class="readout"><span>Wind: <b id="p_speed">–</b></span><span class="only-einzel">Winkel zu den Isobaren: <b id="p_angle">–</b></span></div>
+    <div class="ctrl">
+      <label>Geographische Breite: <span id="p_latv" class="val"></span>
+        <input type="range" id="p_lat" min="-90" max="90" step="5" value="50" aria-label="Geographische Breite"></label>
+      <label>Reibung: <span id="p_reibv" class="val"></span>
+        <input type="range" id="p_reib" min="0" max="100" step="5" value="0" aria-label="Reibung"></label>
+      <label>Druckgefälle (Isobarenabstand): <span id="p_gradv" class="val"></span>
+        <input type="range" id="p_grad" min="1" max="5" step="1" value="3" aria-label="Druckgefälle"></label>
+    </div>
+    <div class="stepbar">
+      <button type="button" class="sbtn" id="p_reset">↺ Neu starten</button>
+      <button type="button" class="sbtn" id="p_pause">❚❚ Pause</button>
+      <label class="only-einzel chk"><input type="checkbox" id="p_vek" checked> Kraftpfeile</label>
+      <label class="only-einzel chk"><input type="checkbox" id="p_spur" checked> Bahn zeichnen</label>
+    </div>
+  </section>
+
+  <section class="box task frage">
+    <span class="tag"></span><span class="afb">AFB II</span>
+    <p><span class="op">Ermittle</span> mit der Simulation (Modus „Einzelnes Luftpaket“, 50° N, Reibung 0), in welche Richtung der Wind weht, sobald sich die Kräfte nicht mehr ändern.</p>
+    <div class="opts" role="radiogroup" aria-label="Antwort Frage 2">
+      <label><input type="radio" name="f2" value="a"> direkt vom Hoch ins Tief, senkrecht zu den Isobaren</label>
+      <label><input type="radio" name="f2" value="b"> parallel zu den Isobaren, das Tief liegt in Strömungsrichtung links</label>
+      <label><input type="radio" name="f2" value="c"> parallel zu den Isobaren, das Tief liegt in Strömungsrichtung rechts</label>
+      <label><input type="radio" name="f2" value="d"> schräg über die Isobaren vom Tief zum Hoch</label>
+    </div>
+    <div><button type="button" class="btn" data-check="f2">Antwort prüfen</button></div>
+    <div class="fb" id="fb-f2" aria-live="polite"></div>
+  </section>
+
+  <section class="box task frage">
+    <span class="tag"></span><span class="afb">AFB II</span>
+    <p><span class="op">Erkläre</span>: Erhöhe nun die Reibung auf „Land“. Welche Aussage beschreibt die Veränderung richtig?</p>
+    <div class="opts" role="radiogroup" aria-label="Antwort Frage 3">
+      <label><input type="radio" name="f3" value="a"> Der Wind wird schneller und weht weiterhin parallel zu den Isobaren.</label>
+      <label><input type="radio" name="f3" value="b"> Der Wind wird langsamer, dadurch wird die Corioliskraft kleiner und der Wind strömt schräg über die Isobaren ins Tief.</label>
+      <label><input type="radio" name="f3" value="c"> Der Wind wird langsamer, dadurch wird die Corioliskraft größer und der Wind wird vom Tief weggelenkt.</label>
+      <label><input type="radio" name="f3" value="d"> Die Reibung verringert nur die Geschwindigkeit, die Richtung bleibt gleich.</label>
+    </div>
+    <div><button type="button" class="btn" data-check="f3">Antwort prüfen</button></div>
+    <div class="fb" id="fb-f3" aria-live="polite"></div>
+  </section>
+
+  <section class="box task frage">
+    <span class="tag"></span><span class="afb">AFB II</span>
+    <p><span class="op">Beschreibe</span>: Wechsle in den Modus „Hoch und Tief“ (50° N, Reibung „Land“). Wie strömt die Luft am Boden um das <b>Tief</b>?</p>
+    <div class="opts" role="radiogroup" aria-label="Antwort Frage 4">
+      <label><input type="radio" name="f4" value="a"> im Uhrzeigersinn, spiralförmig hineinströmend</label>
+      <label><input type="radio" name="f4" value="b"> gegen den Uhrzeigersinn, spiralförmig hineinströmend</label>
+      <label><input type="radio" name="f4" value="c"> gegen den Uhrzeigersinn, spiralförmig herausströmend</label>
+      <label><input type="radio" name="f4" value="d"> kreisförmig parallel zu den Isobaren, ohne hineinzuströmen</label>
+    </div>
+    <div><button type="button" class="btn" data-check="f4">Antwort prüfen</button></div>
+    <div class="fb" id="fb-f4" aria-live="polite"></div>
+  </section>
+
+  <h2>3 Transfer</h2>
+
+  <section class="box task">
+    <span class="tag"></span><span class="afb">AFB III</span>
+    <p><span class="op">Erläutere</span> mithilfe der wirkenden Kräfte, warum sich in Äquatornähe kein dauerhaftes Hoch-Tief-Paar mit isobarenparallelem Wind halten kann, und <span class="op">begründe</span>, warum der Jetstream in rund 10 km Höhe nahezu isobarenparallel weht.</p>
+    <textarea id="a5" aria-label="Antwort Aufgabe 5" placeholder="Deine Antwort …"></textarea>
+    <div class="hint">Nutze die Fachbegriffe Gradientkraft, Corioliskraft, Reibung, Gleichgewicht und geostrophischer Wind. Teste in der Simulation 0° bzw. 5° Breite.</div>
+  </section>
+</main>
+
+<button type="button" class="printbtn" id="printBtn" title="Als PDF speichern oder drucken (DIN A4)">PDF/Drucken (A4)</button>
+
+<script>
+(function(){
+  'use strict';
+  var P = 'ab-wind-hoch-tief:';
+  function sv(k,v){ try{ localStorage.setItem(P+k, JSON.stringify(v)); }catch(e){} }
+  function ld(k,d){ try{ var r = localStorage.getItem(P+k); return r===null ? d : JSON.parse(r); }catch(e){ return d; } }
+  var $ = function(s,r){ return (r||document).querySelector(s); };
+  var $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+
+  /* ---- Automatisches Speichern aller Eingaben ---- */
+  $$('input,select,textarea').forEach(function(el){
+    if(el.type==='radio'){
+      var saved = ld('r:'+el.name, null);
+      if(saved===el.value) el.checked = true;
+      el.addEventListener('change', function(){ sv('r:'+el.name, el.value); });
+    } else if(el.type==='checkbox'){
+      el.checked = !!ld(el.id, el.defaultChecked);
+      el.addEventListener('change', function(){ sv(el.id, el.checked); });
+    } else if(el.id){
+      var v = ld(el.id, null);
+      if(v!==null) el.value = v;
+      el.addEventListener('input', function(){ sv(el.id, el.value); });
+      el.addEventListener('change', function(){ sv(el.id, el.value); });
+    }
+  });
+
+  /* ---- Hilfsfunktionen Zeichnen ---- */
+  var FONT = '"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif';
+  var COL = { ink:'#13243b', mut:'#56677c', H:'#1f5fbf', T:'#c0392b', G:'#c0392b', C:'#7b3fb5', R:'#6b7280', V:'#0e7c86' };
+  function setup(c,W,H){
+    var dpr = Math.min(window.devicePixelRatio||1, 2);
+    c.width = Math.round(W*dpr); c.height = Math.round(H*dpr);
+    var x = c.getContext('2d'); x.setTransform(dpr,0,0,dpr,0,0);
+    return { ctx:x, dpr:dpr, W:W, H:H };
+  }
+  function arrow(ctx,x,y,dx,dy,col,lab,w,max){
+    var L = Math.sqrt(dx*dx+dy*dy); if(L<4) return;
+    max = max||140; if(L>max){ dx*=max/L; dy*=max/L; L=max; }
+    var ex=x+dx, ey=y+dy, ux=dx/L, uy=dy/L, h=Math.min(11, L*.5);
+    ctx.strokeStyle=col; ctx.fillStyle=col; ctx.lineWidth=w||3; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(ex-ux*h*.8, ey-uy*h*.8); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ex,ey);
+    ctx.lineTo(ex-ux*h-uy*h*.6, ey-uy*h+ux*h*.6);
+    ctx.lineTo(ex-ux*h+uy*h*.6, ey-uy*h-ux*h*.6);
+    ctx.closePath(); ctx.fill();
+    if(lab){ ctx.font='bold 14px '+FONT; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(lab, ex+ux*13, ey+uy*13); }
+  }
+  function letter(ctx,ch,sub,x,y,col,a){
+    if(a<=0.01) return;
+    ctx.save(); ctx.globalAlpha=a;
+    ctx.fillStyle='rgba(255,255,255,.88)'; ctx.strokeStyle=col; ctx.lineWidth=2;
+    var w = sub ? 92 : 40;
+    ctx.beginPath(); if(ctx.roundRect){ ctx.roundRect(x-w/2,y-20,w,sub?50:40,8); } else { ctx.rect(x-w/2,y-20,w,sub?50:40); }
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle=col; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.font='bold 26px '+FONT; ctx.fillText(ch,x,y);
+    if(sub){ ctx.font='600 12px '+FONT; ctx.fillText(sub,x,y+20); }
+    ctx.restore();
+  }
+  function mix(a,b,t){ // Hex-Farben mischen
+    var pa=[1,3,5].map(function(i){return parseInt(a.substr(i,2),16);}), pb=[1,3,5].map(function(i){return parseInt(b.substr(i,2),16);});
+    return 'rgb('+pa.map(function(v,i){return Math.round(v+(pb[i]-v)*t);}).join(',')+')';
+  }
+
+  /* =====================================================================
+     TEIL 1: Vertikalschnitt – thermische Zirkulation
+     ===================================================================== */
+  var cvV = $('#cvV'), gV = setup(cvV, 760, 400), cV = gV.ctx;
+  var XK = 190, XW = 570, GROUND = 340;
+  var STEPS = [
+    ['Schritt 1 – Ausgangslage:', 'Beide Oberflächen sind gleich warm. Die Flächen gleichen Luftdrucks (Isobarenflächen) liegen waagerecht. Es gibt keinen Druckunterschied und daher keinen Wind.'],
+    ['Schritt 2 – Unterschiedliche Erwärmung:', 'Über der wärmeren Fläche dehnt sich die Luftsäule aus, die Isobarenflächen werden angehoben. In gleicher Höhe herrscht dort nun höherer Druck (Höhenhoch) als über der kühleren Fläche, deren Luftsäule schrumpft (Höhentief). Am Boden ist der Druck noch überall gleich.'],
+    ['Schritt 3 – Ausgleich in der Höhe:', 'In der Höhe strömt Luft vom Höhenhoch zum Höhentief. Über der wärmeren Fläche nimmt dadurch die Luftmasse ab – am Boden entsteht ein Bodentief. Über der kühleren Fläche nimmt sie zu – es entsteht ein Bodenhoch.'],
+    ['Schritt 4 – Ausgleich am Boden, geschlossene Zirkulation:', 'Am Boden weht Wind vom Bodenhoch zum Bodentief. Über dem Tief steigt Luft auf, über dem Hoch sinkt sie ab. Wind ist also eine Ausgleichsströmung zwischen hohem und tiefem Druck. So einfach bleibt es nur bei kleinräumigen Systemen (z. B. Land-See-Wind) – über große Entfernungen lenkt die Corioliskraft den Wind ab (→ Teil 2).']
+  ];
+  var V = { step: Math.min(4, Math.max(1, ld('v_step',1)|0)), s2:0, s3:0, s4:0, u:[], auto:false, autoT:0 };
+  V.s2 = V.step>=2?1:0; V.s3 = V.step>=3?1:0; V.s4 = V.step>=4?1:0;
+  for(var i=0;i<28;i++) V.u.push(i/28);
+
+  var dotsBox = $('#v_dots');
+  for(var s=1;s<=4;s++){ (function(n){
+    var b=document.createElement('button'); b.type='button'; b.textContent=n; b.setAttribute('aria-label','Schritt '+n);
+    b.addEventListener('click', function(){ setStep(n); stopAuto(); }); dotsBox.appendChild(b);
+  })(s); }
+  function setStep(n){
+    V.step = Math.min(4, Math.max(1,n)); sv('v_step', V.step);
+    $$('button', dotsBox).forEach(function(b,i){ b.classList.toggle('on', i+1===V.step); });
+    $('#v_title').textContent = STEPS[V.step-1][0];
+    $('#v_text').textContent = STEPS[V.step-1][1];
+  }
+  function stopAuto(){ V.auto=false; $('#v_auto').classList.remove('on'); $('#v_auto').textContent='▶ Automatisch'; }
+  $('#v_prev').addEventListener('click', function(){ stopAuto(); setStep(V.step-1); });
+  $('#v_next').addEventListener('click', function(){ stopAuto(); setStep(V.step+1); });
+  $('#v_auto').addEventListener('click', function(){
+    if(V.auto){ stopAuto(); return; }
+    V.auto=true; V.autoT=0; this.classList.add('on'); this.textContent='❚❚ Anhalten';
+    if(V.step===4) setStep(1);
+  });
+  function updDt(){ var d=+$('#v_dt').value; $('#v_dtv').textContent = d+' K'; }
+  $('#v_dt').addEventListener('input', updDt); updDt(); setStep(V.step);
+
+  // Umlaufbahn der Zirkulation: Boden (H→T), Aufsteigen, Höhe (zurück), Absinken
+  var PB = 292, PT = 104, LH = XW-XK, LV = PB-PT, PER = 2*LH+2*LV;
+  function pathPos(u){
+    var d = u*PER;
+    if(d<LH) return {x:XK+d, y:PB, dx:1, dy:0, seg:0};
+    d-=LH; if(d<LV) return {x:XW, y:PB-d, dx:0, dy:-1, seg:1};
+    d-=LV; if(d<LH) return {x:XW-d, y:PT, dx:-1, dy:0, seg:2};
+    d-=LH; return {x:XK, y:PT+d, dx:0, dy:1, seg:3};
+  }
+  function shape(x){ var t=(x-380)/120; var e=Math.exp(2*t); return (e-1)/(e+1); }
+
+  function drawV(dt){
+    var spd = 0.75*dt;
+    function app(v,t){ return v + Math.max(-spd, Math.min(spd, t-v)); }
+    V.s2 = app(V.s2, V.step>=2?1:0); V.s3 = app(V.s3, V.step>=3?1:0); V.s4 = app(V.s4, V.step>=4?1:0);
+    if(V.auto){ V.autoT += dt; if(V.autoT>5){ V.autoT=0; if(V.step<4) setStep(V.step+1); else stopAuto(); } }
+    var fac = (+$('#v_dt').value)/20, s2=V.s2, s3=V.s3, s4=V.s4, c=cV;
+
+    var sky = c.createLinearGradient(0,0,0,GROUND); sky.addColorStop(0,'#eef4fa'); sky.addColorStop(1,'#ffffff');
+    c.fillStyle=sky; c.fillRect(0,0,760,400);
+    // Luftsäulen
+    c.fillStyle='rgba(31,95,191,'+(0.10*s2*fac*1.6)+')'; c.fillRect(XK-120,0,240,GROUND);
+    c.fillStyle='rgba(228,87,46,'+(0.10*s2*fac*1.6)+')'; c.fillRect(XW-120,0,240,GROUND);
+    // Oberflächen
+    c.fillStyle = mix('#9aa7b4','#4f86c6', s2*Math.min(1,fac*1.5)); c.fillRect(0,GROUND,380,60);
+    c.fillStyle = mix('#9aa7b4','#e08a3c', s2*Math.min(1,fac*1.5)); c.fillRect(380,GROUND,380,60);
+    var dT = fac*20*s2;
+    c.fillStyle='#fff'; c.font='600 13px '+FONT; c.textAlign='center'; c.textBaseline='middle';
+    c.fillText('kühlere Oberfläche (z. B. Meer am Tag)', XK, GROUND+20);
+    c.fillText('wärmere Oberfläche (z. B. Land am Tag)', XW, GROUND+20);
+    c.font='bold 14px '+FONT;
+    c.fillText((15-dT/2).toFixed(0).replace('-','−')+' °C', XK, GROUND+42);
+    c.fillText((15+dT/2).toFixed(0)+' °C', XW, GROUND+42);
+    // Wärmeflimmern
+    if(s2*fac>0.02){
+      c.save(); c.globalAlpha = Math.min(1,s2*fac*1.4)*0.55; c.strokeStyle='#e4572e'; c.lineWidth=1.5;
+      var tt = performance.now()/600;
+      for(var k=0;k<6;k++){ var x0=XW-110+k*44; c.beginPath();
+        for(var yy=0; yy<40; yy+=2){ var y=GROUND-6-yy; var x=x0+Math.sin(yy/5+tt+k)*3; if(yy===0) c.moveTo(x,y); else c.lineTo(x,y); }
+        c.stroke(); }
+      c.restore();
+    }
+    // Isobarenflächen
+    var labels=['1000 hPa','900 hPa','800 hPa','700 hPa','600 hPa','500 hPa'];
+    for(var i=0;i<6;i++){
+      var base = 325 - i*52, h = i/5;
+      c.strokeStyle = COL.mut; c.lineWidth = 1.6; c.setLineDash(i===0?[]:[]); c.beginPath();
+      for(var x=0; x<=760; x+=8){
+        var sh = shape(x);
+        var dy = fac*( s2*46*h*sh - s3*26*(1-h)*sh );
+        var y = base - dy;
+        if(x===0) c.moveTo(x,y); else c.lineTo(x,y);
+      }
+      c.stroke();
+      c.fillStyle=COL.mut; c.font='11px '+FONT; c.textAlign='left'; c.textBaseline='bottom';
+      var y0 = base - fac*( s2*46*h*shape(6) - s3*26*(1-h)*shape(6) );
+      c.fillText(labels[i], 6, y0-2);
+    }
+    // Zirkulation (Teilchen)
+    var move = s3>0.05 ? (25+110*fac) : 0;
+    for(var j=0;j<V.u.length;j++){
+      V.u[j] = (V.u[j] + dt*move/PER) % 1;
+      var p = pathPos(V.u[j]);
+      var a = p.seg===2 ? s3 : s4; if(fac<0.02) a=0;
+      if(a<0.02) continue;
+      var col = p.seg===1 ? COL.T : (p.seg===3 ? COL.H : COL.ink);
+      c.save(); c.globalAlpha=a; c.translate(p.x,p.y); c.rotate(Math.atan2(p.dy,p.dx));
+      c.strokeStyle=col; c.lineWidth=3; c.lineCap='round'; c.lineJoin='round';
+      c.beginPath(); c.moveTo(-6,-6); c.lineTo(2,0); c.lineTo(-6,6); c.stroke(); c.restore();
+    }
+    // Beschriftungen der Strömung
+    c.textAlign='center'; c.textBaseline='middle'; c.font='600 13px '+FONT;
+    if(fac>0.02){
+      c.save(); c.globalAlpha=s3; c.fillStyle=COL.ink; c.fillText('Höhenströmung (Höhenhoch → Höhentief)', 380, PT-16); c.restore();
+      c.save(); c.globalAlpha=s4; c.fillStyle=COL.ink; c.fillText('Wind (Bodenhoch → Bodentief)', 380, PB+16);
+      c.fillStyle=COL.T; c.translate(XW+22,(PB+PT)/2); c.rotate(-Math.PI/2); c.fillText('Aufsteigen', 0,0); c.restore();
+      c.save(); c.globalAlpha=s4; c.fillStyle=COL.H; c.translate(XK-22,(PB+PT)/2); c.rotate(-Math.PI/2); c.fillText('Absinken', 0,0); c.restore();
+    }
+    // Druckgebilde
+    var af = Math.min(1, fac*4);
+    letter(c,'H','Höhenhoch', XW, 54, COL.H, s2*af);
+    letter(c,'T','Höhentief', XK, 54, COL.T, s2*af);
+    letter(c,'T','Bodentief', XW+90, 300, COL.T, s3*af);
+    letter(c,'H','Bodenhoch', XK-90, 300, COL.H, s3*af);
+  }
+
+  /* =====================================================================
+     TEIL 2: Draufsicht – Gradientkraft, Corioliskraft, Reibung
+     ===================================================================== */
+  var cvP = $('#cvP'), gP = setup(cvP, 760, 440), cP = gP.ctx, WP=760, HP=440;
+  var KD = 0.3; // Anpassungsdämpfung (vereinfachte geostrophische Anpassung)
+  var M2S = 0.23; // Umrechnung Simulationsgeschwindigkeit -> m/s (schematisch)
+  var PP = { run:true, pk:null, trail:[], exited:false, parts:[], bg:null, bgKey:'', tr:null };
+  var HX=230, HY=220, TX=530, TY=220, S2=150*150;
+
+  function prm(){
+    var grad=+$('#p_grad').value, lat=+$('#p_lat').value, reib=+$('#p_reib').value;
+    return { grad:grad, g:10*grad, lat:lat, f:0.6*Math.sin(lat*Math.PI/180), r:reib/100*0.9, reib:reib };
+  }
+  function mode(){ var m=$('input[name=p_modus]:checked'); return m ? m.value : 'einzel'; }
+  function veq(gx,gy,f,r){ var D=f*f+r*r; if(D<0.0016) return null; return { x:(r*gx-f*gy)/D, y:(f*gx+r*gy)/D }; }
+  function forces(o,gx,gy,f,r){ return { cx:-f*o.vy, cy:f*o.vx, rx:-r*o.vx, ry:-r*o.vy }; }
+  function integrate(o,gx,gy,f,r,dt){
+    var F = forces(o,gx,gy,f,r), ax=gx+F.cx+F.rx, ay=gy+F.cy+F.ry, e=veq(gx,gy,f,r);
+    if(e){ ax += -KD*(o.vx-e.x); ay += -KD*(o.vy-e.y); }
+    o.vx += ax*dt; o.vy += ay*dt;
+    var sp = Math.sqrt(o.vx*o.vx+o.vy*o.vy); if(sp>420){ o.vx*=420/sp; o.vy*=420/sp; }
+    o.x += o.vx*dt; o.y += o.vy*dt;
+  }
+  function latTxt(l){ return l===0 ? '0° (Äquator)' : Math.abs(l)+'° '+(l>0?'N':'S'); }
+  function reibTxt(r){ return r===0 ? '0 (Höhe, frei)' : r<=20 ? r+' % (Meer)' : r<=55 ? r+' % (Land)' : r+' % (Gebirge/Stadt)'; }
+  function updLabels(){
+    var q=prm();
+    $('#p_latv').textContent = latTxt(q.lat);
+    $('#p_reibv').textContent = reibTxt(q.reib);
+    $('#p_gradv').textContent = ['','schwach','mäßig','mittel','stark','sehr stark'][q.grad];
+    var m=mode();
+    $$('.only-einzel').forEach(function(e){ e.style.display = m==='einzel' ? '' : 'none'; });
+    $('#p_leg').style.display = m==='einzel' ? '' : 'none';
+  }
+  function resetP(){
+    PP.pk = { x:190, y:(prm().f<0 ? HP-45 : 45), vx:0, vy:0 };
+    PP.trail = []; PP.exited=false; PP.parts=[];
+    if(PP.tr){ PP.tr.ctx.setTransform(1,0,0,1,0,0); PP.tr.ctx.clearRect(0,0,PP.tr.c.width,PP.tr.c.height); PP.tr.ctx.setTransform(PP.tr.dpr,0,0,PP.tr.dpr,0,0); }
+  }
+  ['p_lat','p_reib','p_grad'].forEach(function(id){ $('#'+id).addEventListener('input', function(){ updLabels(); if(PP.exited) resetP(); else PP.trail=[]; }); });
+  $$('input[name=p_modus]').forEach(function(r){ r.addEventListener('change', function(){ updLabels(); resetP(); }); });
+  $('#p_reset').addEventListener('click', resetP);
+  $('#p_pause').addEventListener('click', function(){ PP.run=!PP.run; this.textContent = PP.run ? '❚❚ Pause' : '▶ Weiter'; this.classList.toggle('on', !PP.run); });
+
+  // Spurenebene für den Feldmodus
+  (function(){ var c=document.createElement('canvas'); var g=setup(c,WP,HP); PP.tr={c:c,ctx:g.ctx,dpr:g.dpr}; })();
+
+  /* -- Modus "Einzelnes Luftpaket": gerade, parallele Isobaren -- */
+  function drawEinzel(dt){
+    var q=prm(), c=cP, sp=210/q.grad; // Isobarenabstand in px
+    var bg=c.createLinearGradient(0,0,WP,0); bg.addColorStop(0,'#e3ecf8'); bg.addColorStop(.5,'#ffffff'); bg.addColorStop(1,'#fbe7e3');
+    c.fillStyle=bg; c.fillRect(0,0,WP,HP);
+    // Isobaren
+    c.strokeStyle=COL.mut; c.lineWidth=1.4; c.fillStyle=COL.mut; c.font='11px '+FONT; c.textAlign='center'; c.textBaseline='top';
+    var n=0;
+    for(var x=60; x<WP-30; x+=sp){
+      c.beginPath(); c.moveTo(x,0); c.lineTo(x,HP); c.stroke();
+      if(sp>=50 || n%2===0){
+        c.save(); c.fillStyle='rgba(255,255,255,.85)'; c.fillRect(x-22,HP-18,44,15); c.restore();
+        c.fillText((1028-4*n)+' hPa', x, HP-17);
+      }
+      n++;
+    }
+    letter(c,'H','hoher Druck',48,34,COL.H,1);
+    letter(c,'T','tiefer Druck',WP-52,34,COL.T,1);
+
+    var o=PP.pk, gx=q.g, gy=0;
+    if(PP.run && !PP.exited){
+      var steps=4, h=dt/steps;
+      for(var k=0;k<steps;k++){
+        integrate(o,gx,gy,q.f,q.r,h);
+        if(o.y>HP+12){ o.y-=HP+24; PP.trail.push(null); }
+        if(o.y<-12){ o.y+=HP+24; PP.trail.push(null); }
+        if(o.x<4||o.x>WP-4){ PP.exited=true; break; }
+      }
+      PP.trail.push([o.x,o.y]); if(PP.trail.length>2500) PP.trail.splice(0,PP.trail.length-2500);
+    }
+    // Bahn
+    if($('#p_spur').checked){
+      c.strokeStyle='rgba(14,124,134,.55)'; c.lineWidth=2; c.setLineDash([5,4]); c.beginPath(); var pen=false;
+      PP.trail.forEach(function(p){ if(!p){ pen=false; return; } if(!pen){ c.moveTo(p[0],p[1]); pen=true; } else c.lineTo(p[0],p[1]); });
+      c.stroke(); c.setLineDash([]);
+    }
+    // Luftpaket
+    c.fillStyle='#fff'; c.strokeStyle=COL.ink; c.lineWidth=2.5;
+    c.beginPath(); c.arc(o.x,o.y,9,0,Math.PI*2); c.fill(); c.stroke();
+    var F=forces(o,gx,gy,q.f,q.r), S=2.2;
+    if($('#p_vek').checked){
+      arrow(c,o.x,o.y,gx*S,gy*S,COL.G,'G');
+      arrow(c,o.x,o.y,F.cx*S,F.cy*S,COL.C,'C');
+      arrow(c,o.x,o.y,F.rx*S,F.ry*S,COL.R,'R');
+    }
+    arrow(c,o.x,o.y,o.vx*1.1,o.vy*1.1,COL.V,'v',3.5,170);
+
+    // Anzeigen
+    var spd=Math.sqrt(o.vx*o.vx+o.vy*o.vy);
+    $('#p_speed').textContent = spd<1 ? '–' : '≈ '+Math.round(spd*M2S)+' m/s (schematisch)';
+    $('#p_angle').textContent = spd<3 ? '–' : Math.round(Math.atan2(Math.abs(o.vx),Math.abs(o.vy))*180/Math.PI)+'°';
+    var e=veq(gx,gy,q.f,q.r), st;
+    if(PP.exited){
+      st = Math.abs(q.f)<0.055
+        ? 'Das Luftpaket verlässt den Ausschnitt: In Äquatornähe fehlt die ablenkende Kraft fast ganz. Die Luft strömt beschleunigt direkt ins Tief – der Druckunterschied wird rasch ausgeglichen. Starte neu oder ändere die Breite.'
+        : 'Das Luftpaket hat den Ausschnitt verlassen. Starte neu.';
+    } else if(spd<2){ st='Die Luft ruht. Die Gradientkraft setzt sie gleich in Richtung Tief in Bewegung …'; }
+    else if(e && Math.hypot(o.vx-e.x,o.vy-e.y) < 0.05*Math.hypot(e.x,e.y)){
+      st = q.r===0
+        ? 'Gleichgewicht: Gradientkraft und Corioliskraft sind gleich groß und entgegengesetzt. Dieser reibungsfreie Wind heißt geostrophischer Wind.'
+        : 'Gleichgewicht: Die Gradientkraft hält der Summe aus Corioliskraft und Reibungskraft die Waage. Dieser Bodenwind ist langsamer und quert die Isobaren schräg.';
+    } else if(Math.abs(q.f)<0.055){ st='Kaum Corioliskraft: Die Luft wird fast nicht abgelenkt und immer schneller.'; }
+    else { st='Die Luft wird beschleunigt. Mit wachsender Geschwindigkeit nimmt die Corioliskraft zu und lenkt sie '+(q.f>0?'nach rechts':'nach links')+' ab …'; }
+    $('#p_stat').textContent = st;
+  }
+
+  /* -- Modus "Hoch und Tief": Druckfeld mit vielen Teilchen -- */
+  function field(x,y){
+    var dxH=x-HX, dyH=y-HY, dxT=x-TX, dyT=y-TY;
+    var eH=Math.exp(-(dxH*dxH+dyH*dyH)/S2), eT=Math.exp(-(dxT*dxT+dyT*dyT)/S2);
+    return { q:eH-eT, fx:2/S2*(eH*dxH-eT*dxT), fy:2/S2*(eH*dyH-eT*dyT) }; // fx,fy = −∇q
+  }
+  function buildBg(grad){
+    var c=document.createElement('canvas'), dpr=gP.dpr, w=Math.round(WP*dpr), h=Math.round(HP*dpr);
+    c.width=w; c.height=h; var x=c.getContext('2d'), img=x.createImageData(w,h), d=img.data, amp=8*grad;
+    for(var py=0; py<h; py++){ for(var px=0; px<w; px++){
+      var F=field(px/dpr, py/dpr), lev=amp*F.q/4;
+      var gm=amp/4*Math.sqrt(F.fx*F.fx+F.fy*F.fy)/dpr;
+      var dist=Math.abs(lev-Math.round(lev))/Math.max(gm,1e-6);
+      var tq=Math.min(1,Math.abs(F.q))*0.22, r=255,g=255,b=255;
+      if(F.q>0){ r=255-(255-31)*tq; g=255-(255-95)*tq; b=255-(255-191)*tq; }
+      else { r=255-(255-192)*tq; g=255-(255-57)*tq; b=255-(255-43)*tq; }
+      if(dist<0.9){ var a=1-dist/0.9; a*=0.85; r=r+(86-r)*a; g=g+(103-g)*a; b=b+(124-b)*a; }
+      var i=(py*w+px)*4; d[i]=r; d[i+1]=g; d[i+2]=b; d[i+3]=255;
+    } }
+    x.putImageData(img,0,0); return c;
+  }
+  function spawn(){
+    var o={ x:10+Math.random()*(WP-20), y:10+Math.random()*(HP-20), vx:0, vy:0, age:0, life:5+Math.random()*7 };
+    return o;
+  }
+  function drawFeld(dt){
+    var q=prm(), c=cP, key=q.grad+'|'+gP.dpr;
+    if(PP.bgKey!==key){ PP.bg=buildBg(q.grad); PP.bgKey=key; }
+    c.drawImage(PP.bg,0,0,WP,HP);
+    var tc=PP.tr.ctx;
+    while(PP.parts.length<170) PP.parts.push(spawn());
+    if(PP.run){
+      tc.save(); tc.globalCompositeOperation='destination-out'; tc.fillStyle='rgba(0,0,0,0.035)'; tc.fillRect(0,0,WP,HP); tc.restore();
+      var K=100*q.g;
+      PP.parts.forEach(function(o,idx){
+        var x0=o.x, y0=o.y, steps=3, h=dt/steps;
+        for(var k=0;k<steps;k++){ var F=field(o.x,o.y); integrate(o,K*F.fx,K*F.fy,q.f,q.r,h); }
+        o.age+=dt;
+        var a=Math.min(1,o.age/0.6, Math.max(0,(o.life-o.age)/1.2));
+        tc.strokeStyle='rgba(14,124,134,'+(0.9*a)+')'; tc.lineWidth=2.4; tc.lineCap='round';
+        tc.beginPath(); tc.moveTo(x0,y0); tc.lineTo(o.x,o.y); tc.stroke();
+        if(o.age>o.life||o.x<-5||o.x>WP+5||o.y<-5||o.y>HP+5) PP.parts[idx]=spawn();
+      });
+    }
+    c.drawImage(PP.tr.c,0,0,WP,HP);
+    // Pfeilspitzen
+    PP.parts.forEach(function(o){
+      var s=Math.sqrt(o.vx*o.vx+o.vy*o.vy); if(s<6) return;
+      var a=Math.min(1,o.age/0.6, Math.max(0,(o.life-o.age)/1.2));
+      c.save(); c.globalAlpha=a; c.translate(o.x,o.y); c.rotate(Math.atan2(o.vy,o.vx));
+      c.fillStyle=COL.V; c.beginPath(); c.moveTo(5,0); c.lineTo(-4,-3.5); c.lineTo(-4,3.5); c.closePath(); c.fill(); c.restore();
+    });
+    var amp=8*q.grad;
+    letter(c,'H',(1013+amp)+' hPa',HX,HY,COL.H,1);
+    letter(c,'T',(1013-amp)+' hPa',TX,TY,COL.T,1);
+    c.fillStyle=COL.mut; c.font='11px '+FONT; c.textAlign='left'; c.textBaseline='bottom';
+    c.fillText('Isobarenabstand 4 hPa', 8, HP-6);
+
+    var mean=0; PP.parts.forEach(function(o){ mean+=Math.sqrt(o.vx*o.vx+o.vy*o.vy); }); mean/=PP.parts.length;
+    $('#p_speed').textContent = '≈ '+Math.round(mean*M2S)+' m/s im Mittel (schematisch)';
+    var st;
+    if(Math.abs(q.f)<0.055) st='Äquatornähe: Die Luft wird kaum abgelenkt und strömt nahezu direkt vom Hoch ins Tief – der Druckunterschied wird rasch abgebaut.';
+    else if(q.r===0) st='Ohne Reibung (Höhe): Die Luft umströmt Hoch und Tief nahezu parallel zu den Isobaren – der Druckunterschied wird kaum ausgeglichen.';
+    else st='Mit Reibung (Bodennähe): Die Luft strömt spiralförmig aus dem Hoch heraus und quert die Isobaren. Achte auf den Drehsinn um Hoch und Tief!';
+    $('#p_stat').textContent = st;
+  }
+
+  /* ---- Animationsschleife (nur sichtbare Simulationen rechnen) ---- */
+  var vis = { v:true, p:true };
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.target===cvV) vis.v=e.isIntersecting; else vis.p=e.isIntersecting; }); });
+    io.observe(cvV); io.observe(cvP);
+  }
+  updLabels(); resetP();
+  var last=null;
+  function loop(t){
+    var dt = last===null ? 0.016 : Math.min(0.05,(t-last)/1000); last=t;
+    if(vis.v) drawV(dt);
+    if(vis.p){ if(mode()==='einzel') drawEinzel(dt); else drawFeld(dt); }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  /* ---- Prüfen mit gestuften Hilfen ---- */
+  function radio(n){ var c=$('input[name='+n+']:checked'); return c ? c.value : ''; }
+  var tasks = {
+    a1: { get:function(){ var ids=['a1_warm_boden','a1_warm_hoehe','a1_kalt_boden','a1_kalt_hoehe'], v=ids.map(function(i){ return $('#'+i).value; });
+            return v.indexOf('')>=0 ? '' : v.join(','); }, ok:'T,H,H,T',
+      hints:['Geh in der Animation zu Schritt 2: Über welcher Fläche liegen die Isobarenflächen in der Höhe höher? Dort ist in gleicher Höhe mehr Luft über dir – also höherer Druck.',
+             'In der Höhe gilt: über der warmen Fläche Hoch, über der kalten Tief. Am Boden kehrt sich das um, weil in der Höhe Luft von der warmen zur kalten Seite abfließt (Schritt 3).',
+             'Lösung: wärmere Fläche – Boden: Tief, Höhe: Hoch; kühlere Fläche – Boden: Hoch, Höhe: Tief. Boden- und Höhendruck sind bei thermischen Druckgebilden immer gegensätzlich.'] },
+    f2: { get:function(){ return radio('f2'); }, ok:'b',
+      hints:['Warte, bis sich die Pfeile nicht mehr verändern. Vergleiche dann die Richtung des Windpfeils (v) mit den Isobaren.',
+             'Die Corioliskraft lenkt auf der Nordhalbkugel so lange nach rechts ab, bis sie der Gradientkraft genau entgegenwirkt. Stell dich gedanklich mit dem Rücken zum Wind: Auf welcher Seite liegt dann das Tief?',
+             'Richtig ist b: Im Gleichgewicht weht der geostrophische Wind isobarenparallel; auf der Nordhalbkugel liegt das Tief in Strömungsrichtung links (Barisches Windgesetz nach Buys-Ballot).'] },
+    f3: { get:function(){ return radio('f3'); }, ok:'b',
+      hints:['Beobachte die Anzeige „Wind“ und den Winkel zu den Isobaren, während du die Reibung erhöhst.',
+             'Die Corioliskraft hängt von der Geschwindigkeit ab. Was passiert mit ihr, wenn die Reibung den Wind bremst? Kann sie die Gradientkraft dann noch ganz ausgleichen?',
+             'Richtig ist b: Reibung bremst den Wind, die geschwindigkeitsabhängige Corioliskraft wird kleiner, die Gradientkraft überwiegt – der Wind quert die Isobaren schräg in Richtung Tief.'] },
+    f4: { get:function(){ return radio('f4'); }, ok:'b',
+      hints:['Beobachte die Pfeilspitzen in der Nähe des Tiefs (T) über einige Sekunden. Strömen sie zum Zentrum hin oder davon weg?',
+             'Am Boden strömt Luft ins Tief hinein. Auf der Nordhalbkugel wird sie dabei nach rechts abgelenkt. Zeichne dir einen Pfeil, der auf T zuläuft, und knicke ihn nach rechts ab – welcher Drehsinn entsteht?',
+             'Richtig ist b: Auf der Nordhalbkugel strömt die Luft am Boden gegen den Uhrzeigersinn spiralförmig ins Tief hinein (Konvergenz) und steigt dort auf; aus dem Hoch strömt sie im Uhrzeigersinn heraus.'] }
+  };
+  function show(id){
+    var t=tasks[id], n=ld('n:'+id,0), done=ld('ok:'+id,false), fb=$('#fb-'+id);
+    if(done){ fb.className='fb ok'; fb.textContent='✔ Richtig!'; return; }
+    fb.className='fb'; fb.textContent='';
+    if(n>0){ var d=document.createElement('div'); d.className='hint'; d.textContent=t.hints[Math.min(n,t.hints.length)-1]; fb.appendChild(d); }
+  }
+  $$('[data-check]').forEach(function(b){
+    var id=b.getAttribute('data-check');
+    b.addEventListener('click', function(){
+      var t=tasks[id], v=t.get();
+      if(!v){ var fb=$('#fb-'+id); fb.className='fb'; fb.textContent='Wähle zuerst eine Antwort (in allen Feldern).'; return; }
+      if(v===t.ok){ sv('ok:'+id,true); } else { sv('n:'+id, ld('n:'+id,0)+1); }
+      show(id);
+    });
+    show(id);
+  });
+
+  $('#printBtn').addEventListener('click', function(){ window.print(); });
+})();
+
+</script>
+</body>
+</html>
