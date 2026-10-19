@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stundenplanung: Monsunklima – Entstehung</title>
+<style>
+  :root{
+    --green:#1b4332; --accent:#e85d04; --ink:#1a3a8a; --red:#c1121f; --bg:#f4f6f5; --line:#cfd8d3;
+    --hand:"Segoe Print","Bradley Hand","Chalkboard SE","Marker Felt","Comic Sans MS","Comic Neue",cursive;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:#1f2a24;font:15px/1.5 "Segoe UI",Arial,sans-serif}
+  .page{max-width:900px;margin:18px auto;background:#fff;padding:26px 30px;border:1px solid var(--line);border-radius:8px}
+  h1{margin:0 0 4px;font-size:1.55em;color:var(--green)}
+  h2{margin:22px 0 8px;font-size:1.15em;color:var(--green);border-left:5px solid var(--accent);padding-left:10px}
+  h3{margin:14px 0 4px;font-size:1em;color:var(--green)}
+  .sub{color:#555;font-size:.92em;margin-bottom:12px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+  .chip{background:#e7efe9;border:1px solid var(--line);border-radius:14px;padding:3px 11px;font-size:.85em}
+  table{border-collapse:collapse;width:100%;font-size:.88em}
+  th{background:var(--green);color:#fff;text-align:left;padding:6px 8px}
+  td{border:1px solid var(--line);padding:6px 8px;vertical-align:top}
+  tr:nth-child(even) td{background:#f3f8f5}
+  .time{white-space:nowrap;font-weight:600}
+  .bar{display:flex;height:30px;border-radius:6px;overflow:hidden;margin:10px 0 4px;font-size:.72em;color:#fff;font-weight:600}
+  .bar div{display:flex;align-items:center;justify-content:center;border-right:2px solid #fff;white-space:nowrap;overflow:hidden}
+  .box{border-radius:10px;padding:10px 14px;margin:10px 0}
+  .info{background:#eef5fb;border:2px solid #7fb2dd}
+  .task{background:#fff7ec;border:2px solid var(--accent)}
+  .help{background:#f4f0fa;border:2px dashed #8d6bc0;font-size:.9em}
+  .tag{display:inline-block;background:var(--accent);color:#fff;border-radius:4px;padding:0 7px;font-size:.78em;font-weight:700;margin-right:6px}
+  .tag.afb{background:var(--green)}
+  ul{margin:4px 0 4px 1.2em;padding:0}
+  li{margin-bottom:3px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .small{font-size:.85em;color:#555}
+  .check li{list-style:"☐  "}
+  /* Hefteintrag */
+  .heft{background:repeating-linear-gradient(#fffef9 0 27px,#cfe3f5 27px 28px);border:1px solid #bcd0e2;border-radius:6px;padding:16px 20px;font-family:var(--hand);color:var(--ink);line-height:28px}
+  .heft h2{border:0;padding:0;margin:0;color:var(--red);font-size:1.35em;text-decoration:underline wavy #c1121f55;text-underline-offset:5px;font-family:var(--hand)}
+  .heft .date{float:right;font-size:.85em}
+  .sk{border-radius:255px 15px 225px 15px/15px 225px 15px 255px;border:2px solid var(--ink);padding:6px 14px;margin:8px 0;background:#fffef9cc;line-height:24px}
+  .sk.red{border-color:var(--red);color:#7a0e17}
+  .heft table{font-family:var(--hand);font-size:.85em;line-height:20px}
+  .heft th{background:#dbe7f5;color:var(--ink);border:2px solid var(--ink)}
+  .heft td{background:#fffef9cc !important;border:2px solid var(--ink);color:var(--ink)}
+  .chain{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;line-height:20px;font-size:.88em}
+  .chain .n{border-radius:255px 15px 225px 15px/15px 225px 15px 255px;border:2px solid var(--ink);padding:3px 10px;background:#fffef9}
+  .chain .n.w{border-color:var(--red)} .chain .n.k{border-color:#2a6f97}
+  .chain .a{color:var(--red);font-size:1.2em}
+  svg{width:100%;height:auto;display:block}
+  svg text{font-family:var(--hand)}
+  .legend{font-size:.8em;line-height:20px;margin:2px 0 0}
+  #pdf-btn{position:fixed;right:18px;bottom:18px;background:var(--green);color:#fff;border:0;border-radius:24px;padding:10px 16px;font-size:.88em;cursor:pointer;opacity:.85;box-shadow:0 2px 8px #0003}
+  #pdf-btn:hover{opacity:1}
+  @media(max-width:700px){.grid2{grid-template-columns:1fr}.page{padding:16px}}
+  @media print{
+    @page{size:A4;margin:11mm}
+    body{background:#fff;font-size:11.5px}
+    .page{margin:0;border:0;border-radius:0;padding:0;max-width:none;page-break-after:always;break-after:page}
+    .page:last-of-type{page-break-after:auto;break-after:auto}
+    #pdf-btn{display:none}
+    .box,.sk,tr,svg{break-inside:avoid}
+    .heft{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    .p1{font-size:10.2px;line-height:1.4}
+    .p1 td,.p1 th{padding:3px 6px}
+    .p1 h2{margin:12px 0 5px}
+    .p1 .box{padding:6px 10px;margin:6px 0}
+    .heft svg{max-width:76%;margin-left:auto;margin-right:auto}
+    .heft{padding:10px 16px}
+    .pbreak{break-before:page;page-break-before:always;height:0}
+  }
+</style>
+</head>
+<body>
+
+<!-- gemeinsame Definitionen für die Skizzen -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="arrR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="#c1121f"/></marker>
+    <marker id="arrB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="#1d4e89"/></marker>
+    <marker id="arrO" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="#e76f51"/></marker>
+    <marker id="arrK" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1 L9 5 L1 9 Z" fill="#444"/></marker>
+  </defs>
+</svg>
+
+<!-- ============ SEITE 1: Planung ============ -->
+<section class="page p1">
+  <h1>Monsunklima – Entstehung</h1>
+  <div class="sub">Geographie 12 · erhöhtes Anforderungsniveau · LehrplanPLUS Gymnasium Bayern · LB 2 „Klima und Klimawandel“ · 1 Unterrichtsstunde (45 Min.) · Material: Buchseiten 28/29 (M1–M5), Atlas</div>
+
+  <h2>Lehrplanbezug und Lernziele</h2>
+  <div class="box info">
+    <b>Kompetenzerwartung (LB 2):</b> Die Schülerinnen und Schüler erläutern Charakteristika des Monsunklimas und erörtern dessen Folgen. <br>
+    <b>Inhalt (LB 2):</b> Monsunklima und seine agrarökonomischen sowie sozialen Folgen am Raumbeispiel Indiens; Auswirkungen der Temperatur- und Druckgegensätze. <br>
+    <b>Arbeitstechniken (LB 1):</b> Klimadiagramme interpretieren, Strukturskizzen und Wirkungszusammenhänge selbst erstellen. <br>
+    <span class="small">Diese Stunde deckt den Teil „Entstehung und Mechanismus“ ab; die Folgen am Raumbeispiel Indien (M5, Monsunvariabilität) folgen in der nächsten Stunde.</span>
+  </div>
+  <h3>Erfolgskriterien – am Stundenende können die Lernenden …</h3>
+  <ul class="check">
+    <li>die Windrichtung und die Druckverhältnisse im Sommer- und im Wintermonsun benennen und in einer Skizze darstellen (AFB I),</li>
+    <li>die Entstehung beider Monsunphasen mit Temperaturgegensatz → Druckgegensatz → Wind sowie mit der Verlagerung der ITC erklären (AFB II),</li>
+    <li>begründen, warum der Sommermonsun feucht und der Wintermonsun trocken ist (AFB II),</li>
+    <li>ihre Erklärung auf das Klimadiagramm von Cherrapunji übertragen (AFB II–III).</li>
+  </ul>
+  <p class="small"><b>Vorwissen (aus Std. 4–5):</b> Drei-Zellen-Modell, Passate, ITC, Corioliseffekt. Zu Beginn wird das kurz abgerufen, nicht neu erklärt.</p>
+
+  <h2>Stundenverlauf (45 Min.)</h2>
+  <div class="bar" aria-label="Zeitleiste">
+    <div style="width:4.4%;background:#6c757d" title="Abruf">2</div>
+    <div style="width:11.1%;background:#2a6f97">Problem 5′</div>
+    <div style="width:22.2%;background:#e85d04">Erarbeitung I · 10′</div>
+    <div style="width:17.8%;background:#c1121f">Erarbeitung II · 8′</div>
+    <div style="width:22.2%;background:#1b4332">Sicherung · 10′</div>
+    <div style="width:17.8%;background:#7b2cbf">Transfer · 8′</div>
+    <div style="width:4.5%;background:#6c757d">2</div>
+  </div>
+  <table>
+    <tr><th style="width:56px">Zeit</th><th style="width:100px">Phase</th><th>Inhalt und Aufträge</th><th style="width:130px">Sozialform / Material</th><th style="width:140px">Prinzip</th></tr>
+    <tr><td class="time">0–2</td><td>Einstieg 1<br>Abruf</td><td>Zwei Abruffragen, Heft zu: „Wohin weht der Nordostpassat?“ – „Wo liegt die ITC im Juli, wo im Januar?“ Kurze Antworten im Plenum.</td><td>Plenum</td><td>Abrufübung, Vorwissen diagnostizieren</td></tr>
+    <tr><td class="time">2–7</td><td>Einstieg 2<br>Problem</td><td>M1 (A Sommer, B Winter, derselbe Raum): <b>Auftrag 1</b> beschreiben, Vermutungen sammeln. Leitfrage an die Tafel (Seitenüberschrift): <i>„Wieso kann es an einem Ort zu Überschwemmungen und Dürren kommen?“</i> Erwartbare Fehlvorstellung „Monsun = Regen“ sichtbar machen.</td><td>Plenum, Buch M1 / Beamer</td><td>kognitive Aktivierung, Fehlvorstellungen aufgreifen</td></tr>
+    <tr><td class="time">7–17</td><td>Erarbeitung I</td><td>Arbeitsteilig: Hälfte A erklärt den <b>Sommermonsun</b> (Auftrag 2A), Hälfte B den <b>Wintermonsun</b> (Auftrag 2B). Jeweils mit beschrifteter Kartenskizze von Südasien (Hoch, Tief, ITC, Windpfeile, in Anlehnung an M4). Gestufte Hilfen liegen bereit.</td><td>Partnerarbeit; Text, M3, M4</td><td>konstruktive Aktivität (ICAP), Scaffolding</td></tr>
+    <tr><td class="time">17–25</td><td>Erarbeitung II</td><td>Neue Paare (A + B): wechselseitig erklären mit der Skizze, danach <b>Auftrag 3</b> (Vergleichstabelle, Skizze des Partners mit Kriterien prüfen).</td><td>Partnerarbeit neu gemischt</td><td>interaktive Aktivität, Selbsterklären, Peerfeedback</td></tr>
+    <tr><td class="time">25–35</td><td>Sicherung</td><td>Zwei Skizzen vorstellen, Tafelbild gemeinsam entwickeln (Skizzen + Ursachenkette + Tabelle). Leitfrage beantworten. Hefteintrag übernehmen (ca. 6 Min. Schreibzeit; Tabelle ggf. Hausaufgabe).</td><td>Lehrer-Schüler-Gespräch, Tafel, Heft</td><td>Dual Coding (Bild + Text), Erfolgskriterien prüfen</td></tr>
+    <tr><td class="time">35–43</td><td>Anwendung / Transfer</td><td><b>Auftrag 4:</b> Cherrapunji (M2): auswerten und mit der Monsunzirkulation erklären. Einzel 4′, Austausch 2′, Plenum 2′. Zusatz für Schnelle: weitere Gründe der extremen Niederschläge.</td><td>Einzelarbeit; M2, M3, M4, Atlas</td><td>Transfer, AFB II–III, Differenzierung</td></tr>
+    <tr><td class="time">43–45</td><td>Abschluss</td><td>Exit-Frage (schriftlich, 1–2 Sätze): <i>„Der Wintermonsun weht in Nordindien aus Nordosten. Begründe, warum in dieser Jahreszeit kaum Niederschlag fällt.“</i> Hausaufgabe: Buch Aufg. 4 (M5, Monsunvariabilität) als Brücke zur nächsten Stunde.</td><td>Einzelarbeit</td><td>formatives Assessment</td></tr>
+  </table>
+  <p class="small">Einordnung in die Sequenz: Phase „Erschließen und Aneignen“ (Deeper Learning). Die Ko-Konstruktion folgt bei den Folgen des Monsuns am Raumbeispiel Indien.</p>
+</section>
+
+<!-- ============ SEITE 2: Arbeitsaufträge ============ -->
+<section class="page">
+  <h1>Arbeitsaufträge (Buchseiten 28/29)</h1>
+  <div class="sub">Zum Anschreiben, Projizieren oder Diktieren · die Zuordnung zu den Buchaufgaben steht jeweils dabei</div>
+
+  <div class="box task">
+    <span class="tag">Auftrag 1</span><span class="tag afb">AFB I</span><b>Beschreiben</b> (Einstieg, Plenum, 5 Min.)<br>
+    Beschreibe die beiden Situationen in M1 (A: Sommer, B: Winter). Formuliere eine Frage, die sich aus dem Vergleich ergibt. <span class="small">(Buch Aufg. 1)</span>
+  </div>
+
+  <div class="grid2">
+    <div class="box task">
+      <span class="tag">Auftrag 2A</span><span class="tag afb">AFB II</span><b>Sommer</b> (Partnerarbeit, 10 Min.)<br>
+      <b>Erkläre,</b> wie im Sommer der Südwestmonsun entsteht.<br>
+      <span class="small">Material: Text ab „Im Sommer wird der Südostpassat …“, M4 (Juli), M3 oben</span>
+      <ul>
+        <li>Warum entsteht über dem Festland ein Tief?</li>
+        <li>Wo liegt die ITC und warum?</li>
+        <li>Woher kommt die Feuchtigkeit der Luft?</li>
+      </ul>
+      <b>Zeichne</b> eine Kartenskizze von Südasien (Umriss Indiens, Himalaya, Arabisches Meer, Golf von Bengalen) mit H und T, der Lage der ITC (lila gestrichelt) und den Windpfeilen im Juli, in Anlehnung an M4.
+    </div>
+    <div class="box task">
+      <span class="tag">Auftrag 2B</span><span class="tag afb">AFB II</span><b>Winter</b> (Partnerarbeit, 10 Min.)<br>
+      <b>Erkläre,</b> wie im Winter der Nordostmonsun entsteht.<br>
+      <span class="small">Material: Text ab „In den Wintermonaten wandert die ITC …“, M4 (Januar), M3 unten</span>
+      <ul>
+        <li>Warum entsteht über Innerasien ein Hoch?</li>
+        <li>Woher weht der Wind, und wohin?</li>
+        <li>Warum bringt er kaum Niederschlag (Absinken)?</li>
+      </ul>
+      <b>Zeichne</b> dieselbe Kartenskizze für den Januar, in Anlehnung an M4.
+    </div>
+  </div>
+
+  <div class="box task">
+    <span class="tag">Auftrag 3</span><span class="tag afb">AFB II</span><b>Vergleichen</b> (neue Paare, 8 Min.)<br>
+    Erkläre deinem Partner die andere Jahreszeit mithilfe deiner Skizze. <b>Vergleicht</b> dann Sommer- und Wintermonsun in einer Tabelle (Temperatur Land/Meer, Luftdruck, Lage der ITC, Windrichtung, Luftfeuchte, Folge). <b>Prüft</b> die Skizze des Partners: ☐ Windpfeile richtig ☐ H und T richtig ☐ ITC eingezeichnet ☐ Begründungskette vollständig.
+  </div>
+
+  <div class="box task">
+    <span class="tag">Auftrag 4</span><span class="tag afb">AFB II–III</span><b>Erklären / Anwenden</b> (Einzelarbeit, 8 Min.)<br>
+    <b>Werte</b> das Klimadiagramm M2 aus (Jahresgang, Extremwerte). <b>Erkläre</b> das Klima von Cherrapunji im Hinblick auf die Monsunzirkulation (Text, M3, M4). <span class="small">(Buch Aufg. 2a und 2b)</span><br>
+    <i>Zusatz:</i> Nenne weitere Gründe, warum Cherrapunji zu den niederschlagsreichsten Orten der Welt zählt (Atlas, Lage beachten). <span class="small">(Buch Aufg. 2c)</span>
+  </div>
+
+  <div class="box task">
+    <span class="tag">Exit-Frage</span><span class="tag afb">AFB II</span><br>
+    Der Wintermonsun weht in Nordindien aus Nordosten. Begründe, warum in dieser Jahreszeit kaum Niederschlag fällt.<br>
+    <span class="small"><b>Hausaufgabe / Vertiefung:</b> Buch Aufg. 4 (Monsunvariabilität an M5, Mindmap) als Brücke zur nächsten Stunde; Buch Aufg. 3 (ostasiatischer Monsun, Recherche) als Wahlaufgabe.</span>
+  </div>
+
+  <h2>Gestufte Hilfen und Sprachhilfen</h2>
+  <div class="box help">
+    <b>Stufe 1 – Denkanstoß:</b> „Wo erwärmt sich die Luft im Sommer stärker, über Land oder über dem Meer? Was macht warme Luft?“ (Winter: „Wo kühlt die Luft stärker aus?“)<br>
+    <b>Stufe 2 – Strategiehilfe:</b> „Lies in M4 und M3 die Pfeile: Von wo nach wo wehen sie am Boden? Wo steht H, wo T, wo liegt die ITC?“<br>
+    <b>Stufe 3 – Teillösung:</b> Satzbausteine:
+    <ul>
+      <li>„Weil sich das Festland im Sommer stärker erwärmt als der Ozean, entsteht über … ein …“</li>
+      <li>„Dadurch strömt Luft am Boden von … nach …; die ITC wandert nach …“</li>
+      <li>„Die Luft ist feucht, weil sie über … Wasserdampf aufgenommen hat; deshalb …“</li>
+      <li>„Im Winter kühlt … stark ab, deshalb entsteht ein …; beim Absinken erwärmt sich die Luft, dadurch …“</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ SEITE 3: Hefteintrag ============ -->
+<section class="page">
+  <h1>Vorschlag Hefteintrag / Tafelbild</h1>
+  <div class="sub">Farbcode: T = rot, H = blau, Windpfeile = dicke rote Pfeile, ITC = lila gestrichelt. Die Kartenskizzen sind so vereinfacht, dass sie in 2–3 Minuten von Hand nachzeichenbar sind; Umriss Indiens und Himalaya zuerst, dann H/T, ITC und Winde.</div>
+
+  <div class="heft">
+    <span class="date">Datum: ________</span>
+    <h2>Monsunklima – Entstehung</h2>
+
+    <div class="sk"><b>Monsun</b> = jahreszeitlich wechselndes Windsystem, bei dem sich die Windrichtung um mehr als 120° dreht (arab. <i>mausim</i> = Jahreszeit). Sonderfall der tropischen Passatzirkulation. <b>Ursache:</b> Temperatur- und Druckgegensätze zwischen Festland und Ozean, dazu die Verlagerung der ITC.</div>
+
+    <svg viewBox="0 18 480 306" role="img" aria-label="Kartenskizze Südasien im Juli mit Hoch, Tief, ITC und Windpfeilen">
+      <rect x="0" y="18" width="480" height="306" rx="8" fill="#d6ecf8"/>
+      <g filter="url(#rough)" stroke-linecap="round" stroke-linejoin="round" fill="none">
+        <path d="M0 0 L0 100 L30 102 L56 102 L86 107 L96 116 L119 132 L125 144 L132 170 L148 208 L154 215 L167 199 L172 183 L183 160 L202 141 L215 128 L228 125 L244 122 L253 141 L263 164 L282 160 L289 183 L289 208 L298 224 L321 257 L314 221 L302 180 L318 196 L330 208 L340 199 L356 186 L350 164 L340 138 L350 128 L369 125 L420 106 L452 74 L470 10 L480 0 Z" fill="#f1deae" stroke="#8a6d3b" stroke-width="2"/>
+        <path d="M268 233 L287 246 L316 273 L335 301 L326 303 L303 285 L284 262 L268 246 Z" fill="#f1deae" stroke="#8a6d3b" stroke-width="2"/>
+        <path d="M338 308 L386 312 L384 318 L338 314 Z" fill="#f1deae" stroke="#8a6d3b" stroke-width="2"/>
+        <path d="M362 256 L381 244 L403 221 L419 234 L413 260 L400 285 L381 288 L365 279 Z" fill="#f1deae" stroke="#8a6d3b" stroke-width="2"/>
+        <ellipse cx="174" cy="219" rx="6" ry="9" fill="#f1deae" stroke="#8a6d3b" stroke-width="2"/>
+        <path d="M134 51 L140 43 L146 51 M144 57 L150 49 L156 57 M154 63 L160 55 L166 63 M166 71 L172 63 L178 71 M178 79 L184 71 L190 79 M190 85 L196 77 L202 85 M202 89 L208 81 L214 89 M214 91 L220 83 L226 91 M226 93 L232 85 L238 93 M238 95 L244 87 L250 95 M250 95 L256 87 L262 95 M170 61 L176 53 L182 61 M184 69 L190 61 L196 69 M198 75 L204 67 L210 75 M212 77 L218 69 L224 77 M226 79 L232 71 L238 79" stroke="#6b5b45" stroke-width="2"/>
+        <path d="M0 266 L480 266" stroke="#888" stroke-width="1.2" stroke-dasharray="3 5"/>
+        
+        <path d="M70 108 C110 100 140 92 175 92 C205 92 225 100 245 104 C270 108 290 112 330 104 C350 100 365 96 385 98" stroke="#7b2cbf" stroke-width="2.4" stroke-dasharray="7 5"/>
+        <path d="M185 315 C120 305 40 290 28 250 C22 215 60 190 100 170 C115 162 122 156 128 148" stroke="#c1121f" stroke-width="4" marker-end="url(#arrR)"/>
+        <path d="M250 318 C238 292 216 262 218 232 C220 200 235 165 244 118" stroke="#c1121f" stroke-width="4" marker-end="url(#arrR)"/>
+        <path d="M236 90 l-3 8 M243 88 l-3 8 M250 90 l-3 8 M126 154 l-3 8 M134 160 l-3 8" stroke="#1d4e89" stroke-width="2"/>
+        <circle cx="245" cy="104" r="3.5" fill="#c1121f" stroke="#c1121f"/>
+        <path d="M252 80 L246 100" stroke="#444" stroke-width="1.2"/>
+
+      </g>
+      <g>
+        <text x="418" y="260" font-size="10" fill="#777">0° Äquator</text>
+        <text x="14" y="138" font-size="11" fill="#2a6f97">Arabisches Meer</text>
+        <text x="268" y="318" font-size="11" fill="#2a6f97">Ind. Ozean</text>
+        <text x="262" y="62" font-size="11" fill="#6b5b45">Himalaya / Tibet</text>
+        <text x="128" y="190" font-size="17" fill="#8a6d3b" opacity=".45">INDIEN</text>
+        
+        <text x="92" y="90" font-size="12" fill="#7b2cbf">ITC (Juli)</text>
+        <circle cx="140" cy="122" r="12" fill="#fff" stroke="#c1121f" stroke-width="2"/><text x="134" y="127" font-size="15" fill="#c1121f">T</text>
+        <text x="156" y="126" font-size="11" fill="#c1121f">Monsuntief</text>
+        <circle cx="200" cy="296" r="12" fill="#fff" stroke="#1d4e89" stroke-width="2"/><text x="194" y="301" font-size="15" fill="#1d4e89">H</text>
+        <text x="62" y="222" font-size="11" fill="#c1121f">SW-Monsun</text>
+        <text x="96" y="318" font-size="11" fill="#c1121f">Südostpassat</text>
+        <text x="212" y="200" font-size="11" fill="#c1121f" text-anchor="end">feucht</text>
+        <text x="253" y="78" font-size="11" fill="#444">Cherrapunji</text>
+        <text x="12" y="40" font-size="14" fill="#1a3a8a">Juli</text>
+
+      </g>
+      <rect x="2" y="20" width="476" height="302" rx="8" fill="none" stroke="#1a3a8a" stroke-width="1.6" stroke-dasharray="5 4"/>
+    </svg>
+    <div class="legend"><b>Skizze 1 – Juli (Sommermonsun, Regenzeit):</b> Festland heiß → Monsuntief über Nordindien; ITC weit im Norden (≈ 25° N); der Südostpassat überquert den Äquator, wird durch den Corioliseffekt nach rechts abgelenkt und weht als feuchter <b>Südwestmonsun</b> auf Indien zu; Steigungsregen an den Westghats und am Himalaya (Cherrapunji).</div>
+
+    <svg style="margin-top:12px" viewBox="0 18 480 306" role="img" aria-label="Kartenskizze Südasien im Januar mit Hoch, Tief, ITC und Windpfeilen">
+      <rect x="0" y="18" width="480" height="306" rx="8" fill="#d6ecf8"/>
+      <g filter="url(#rough)" stroke-linecap="round" stroke-linejoin="round" fill="none">
+        <path d="M0 0 L0 100 L30 102 L56 102 L86 107 L96 116 L119 132 L125 144 L132 170 L148 208 L154 215 L167 199 L172 183 L183 160 L202 141 L215 128 L228 125 L244 122 L253 141 L263 164 L282 160 L289 183 L289 208 L298 224 L321 257 L314 221 L302 180 L318 196 L330 208 L340 199 L356 186 L350 164 L340 138 L350 128 L369 125 L420 106 L452 74 L470 10 L480 0 Z" fill="#f1deae" stroke="#8a6d3b" stroke-width="2"/>
+        <path d="M268 233 L287 246 L316 273 L335 301 L326 303 L303 285 L284 262 L268 246 Z" fill="#f1deae" stroke="#8a6d3b" stroke-width="2"/>
+        <path d="M338 308 L386 312 L384 318 L338 314 Z" fill="#f1deae" stroke="#8a6d3b" stroke-width="2"/>
+        <path d="M362 256 L381 244 L403 221 L419 234 L413 260 L400 285 L381 288 L365 279 Z" fill="#f1deae" stroke="#8a6d3b" stroke-width="2"/>
+        <ellipse cx="174" cy="219" rx="6" ry="9" fill="#f1deae" stroke="#8a6d3b" stroke-width="2"/>
+        <path d="M134 51 L140 43 L146 51 M144 57 L150 49 L156 57 M154 63 L160 55 L166 63 M166 71 L172 63 L178 71 M178 79 L184 71 L190 79 M190 85 L196 77 L202 85 M202 89 L208 81 L214 89 M214 91 L220 83 L226 91 M226 93 L232 85 L238 93 M238 95 L244 87 L250 95 M250 95 L256 87 L262 95 M170 61 L176 53 L182 61 M184 69 L190 61 L196 69 M198 75 L204 67 L210 75 M212 77 L218 69 L224 77 M226 79 L232 71 L238 79" stroke="#6b5b45" stroke-width="2"/>
+        <path d="M0 266 L480 266" stroke="#888" stroke-width="1.2" stroke-dasharray="3 5"/>
+        
+        <path d="M0 285 C80 280 150 268 230 262 C300 262 360 275 480 290" stroke="#7b2cbf" stroke-width="2.4" stroke-dasharray="7 5"/>
+        <path d="M235 92 C190 124 150 152 112 176 C80 196 52 228 22 262" stroke="#c1121f" stroke-width="4" marker-end="url(#arrR)"/>
+        <path d="M290 118 C270 160 238 205 196 252 C188 262 176 268 160 272" stroke="#c1121f" stroke-width="4" marker-end="url(#arrR)"/>
+        <path d="M395 112 C372 156 330 205 292 240 C278 254 262 264 244 270" stroke="#c1121f" stroke-width="4" marker-end="url(#arrR)"/>
+        <circle cx="245" cy="104" r="3.5" fill="#c1121f" stroke="#c1121f"/>
+        <path d="M252 80 L246 100" stroke="#444" stroke-width="1.2"/>
+
+      </g>
+      <g>
+        <text x="418" y="260" font-size="10" fill="#777">0° Äquator</text>
+        <text x="14" y="138" font-size="11" fill="#2a6f97">Arabisches Meer</text>
+        <text x="268" y="318" font-size="11" fill="#2a6f97">Ind. Ozean</text>
+        <text x="262" y="62" font-size="11" fill="#6b5b45">Himalaya / Tibet</text>
+        <text x="128" y="190" font-size="17" fill="#8a6d3b" opacity=".45">INDIEN</text>
+        
+        <circle cx="205" cy="36" r="12" fill="#fff" stroke="#1d4e89" stroke-width="2"/><text x="199" y="41" font-size="15" fill="#1d4e89">H</text>
+        <text x="222" y="40" font-size="11" fill="#1d4e89">Kältehoch Innerasien</text>
+        <circle cx="236" cy="298" r="12" fill="#fff" stroke="#c1121f" stroke-width="2"/><text x="230" y="303" font-size="15" fill="#c1121f">T</text>
+        <text x="252" y="302" font-size="11" fill="#c1121f">Äquatortief</text>
+        <text x="16" y="298" font-size="12" fill="#7b2cbf">ITC (Januar)</text>
+        <text x="84" y="238" font-size="11" fill="#c1121f">NO-Monsun (trocken)</text>
+        <text x="253" y="78" font-size="11" fill="#444">Cherrapunji</text>
+        <text x="12" y="40" font-size="14" fill="#1a3a8a">Januar</text>
+
+      </g>
+      <rect x="2" y="20" width="476" height="302" rx="8" fill="none" stroke="#1a3a8a" stroke-width="1.6" stroke-dasharray="5 4"/>
+    </svg>
+    <div class="legend"><b>Skizze 2 – Januar (Wintermonsun, Trockenzeit):</b> Innerasien kühlt aus → Kältehoch; ITC nahe dem Äquator; trockene Landluft strömt als <b>Nordostmonsun</b> vom Kontinent aufs Meer, beim Absinken im Gangestal kaum Niederschlag.</div>
+
+    <div class="pbreak"></div>
+    <h3 style="font-family:var(--hand);color:var(--red);margin-top:14px">Ursachenketten</h3>
+    <div class="chain">
+      <span class="n w">hohe Einstrahlung</span><span class="a">→</span><span class="n w">Land erwärmt sich stärker als Ozean</span><span class="a">→</span><span class="n w">Tief über Land</span><span class="a">→</span><span class="n w">ITC zieht nach Norden</span><span class="a">→</span><span class="n w">SO-Passat über den Äquator, Coriolis → SW-Monsun</span><span class="a">→</span><span class="n w">Wasserdampf, Konvektion, Steigungsregen</span><span class="a">→</span><span class="n w"><b>Regenzeit</b></span>
+    </div>
+    <div class="chain" style="margin-top:8px">
+      <span class="n k">Innerasien kühlt aus</span><span class="a">→</span><span class="n k">Kältehoch</span><span class="a">→</span><span class="n k">Luft strömt über den Himalaya ab (NO-Monsun)</span><span class="a">→</span><span class="n k">Absinken im Gangestal, Erwärmung</span><span class="a">→</span><span class="n k">rel. Luftfeuchte sinkt</span><span class="a">→</span><span class="n k"><b>Trockenzeit</b></span>
+    </div>
+
+    <table style="margin-top:14px">
+      <tr><th></th><th>Sommermonsun (SW)</th><th>Wintermonsun (NO)</th></tr>
+      <tr><td><b>Land / Meer</b></td><td>Land sehr heiß, Ozean kühler</td><td>Innerasien stark abgekühlt, Ozean wärmer</td></tr>
+      <tr><td><b>Luftdruck</b></td><td>Tief über dem Festland</td><td>Kältehoch über Innerasien</td></tr>
+      <tr><td><b>ITC</b></td><td>weit im Norden (Gangestal)</td><td>nach Süden, nur knapp über den Äquator</td></tr>
+      <tr><td><b>Wind</b></td><td>aus SW, vom Meer zum Land</td><td>aus NO, vom Land zum Meer</td></tr>
+      <tr><td><b>Luft</b></td><td>feucht, Aufsteigen</td><td>trocken, Absinken</td></tr>
+      <tr><td><b>Folge</b></td><td>Regenzeit, Überschwemmungen</td><td>Trockenzeit, Wasserknappheit</td></tr>
+    </table>
+
+    <div class="sk red" style="margin-top:12px"><b>Merke:</b> Der Monsun ist ein <u>Windsystem</u>, nicht der Regen selbst. Der Wechsel entsteht durch jahreszeitliche Temperatur- und Druckgegensätze zwischen Land und Meer und durch die Verlagerung der ITC; der Corioliseffekt lenkt die Luft nur ab. <b>Transfer:</b> Cherrapunji liegt im Luv des Gebirges – Sommermonsun + Steigungsregen → extreme Niederschläge.</div>
+  </div>
+</section>
+
+<!-- ============ SEITE 4: Lehrerhinweise ============ -->
+<section class="page">
+  <h1>Hinweise für die Lehrkraft</h1>
+  <div class="sub">Erwartungshorizont, typische Fehlvorstellungen, Differenzierung</div>
+
+  <h2>Erwartungshorizont</h2>
+  <ul>
+    <li><b>Auftrag 1:</b> A: überflutete Straße, Menschen waten durch Wasser (Regenzeit); B: Menschen holen Wasser an einem Tankwagen (Trockenzeit, Wasserknappheit); derselbe Raum, gegensätzliche Situation. Leitfrage: Woher kommt der Wechsel?</li>
+    <li><b>Auftrag 2A:</b> starke Erwärmung des Festlands → Tief; kühlerer Ozean → relativ höherer Druck; ITC wird nach Norden gezogen; Südostpassat überquert den Äquator und wird abgelenkt (SW-Wind); nimmt über dem Indischen Ozean Wasserdampf auf; Konvektion und Steigungsregen an Gebirgen (Luv).</li>
+    <li><b>Auftrag 2B:</b> Innerasien kühlt stark aus → Kältehoch; ITC weit im Süden; Luft strömt aus dem Hoch über den Himalaya Richtung Indien und Ozean (NO-Wind); beim Absinken ins Gangestal Erwärmung → relative Luftfeuchte sinkt → trocken.</li>
+    <li><b>Auftrag 4:</b> M2 auswerten: ausgeprägte Regenzeit im Sommerhalbjahr mit Maximum im Juni/Juli, Wintermonate sehr trocken, geringe Temperaturamplitude. Erklärung: SW-Monsun bringt feuchte Luft, Aufgleiten am Gebirge; im Winter trockener NO-Monsun. <i>Zusatz (Lage):</i> Cherrapunji liegt am Südabhang der Khasi-Berge im Nordosten Indiens; die feuchte Luft aus dem Golf von Bengalen wird im Luv gestaut und aufgehoben (Steigungsregen), die trichterförmige Lage zur Ebene von Bangladesch verstärkt das. Die Jahressummen und Monatswerte bitte direkt an M2 ablesen.</li>
+  </ul>
+
+  <h2>Typische Fehlvorstellungen und Reaktion</h2>
+  <table>
+    <tr><th style="width:32%">Vorstellung</th><th>Klärung</th></tr>
+    <tr><td>„Monsun = Regen“ oder „Monsun nur im Sommer“</td><td>Monsun bezeichnet den jahreszeitlichen Windrichtungswechsel; es gibt Sommer- und Wintermonsun. Der Regen ist eine Folge der Feuchte der Luftmasse.</td></tr>
+    <tr><td>„Der Wind dreht wegen der Erddrehung“</td><td>Hauptursache sind Temperatur- und Druckgegensätze; Coriolis lenkt nur ab (Südostpassat wird nach Überqueren des Äquators zum Südwestwind).</td></tr>
+    <tr><td>„Die ITC liegt immer am Äquator“</td><td>Sie wandert mit dem Sonnenstand; im Sommer liegt sie über Nordindien (M4), im Winter nahe dem Äquator.</td></tr>
+    <tr><td>„Wind vom Land bringt auch Regen“</td><td>Kontinentale, absinkende Luft ist trocken (Auftrag 2B, Exit-Frage).</td></tr>
+  </table>
+
+  <h2>Differenzierung und Hinweise</h2>
+  <ul>
+    <li><b>Hilfen:</b> gestufte Hilfen (Seite 2) an einer Stelle auslegen oder projizieren, erst auf Nachfrage freigeben.</li>
+    <li><b>Zusatz für Schnelle (AFB III):</b> Buch Aufg. 2c; außerdem: Der Nordostmonsun bringt der Südostküste Indiens (Tamil Nadu) im Spätjahr Niederschläge, weil er die Bucht von Bengalen überquert und Feuchte aufnimmt – das Bild „Wintermonsun = trocken“ gilt also für Nordindien (Hinweis, nicht Prüfungsinhalt).</li>
+    <li><b>Zeit:</b> Die Sicherungsphase ist knapp. Skizzen sind bereits in Erarbeitung I/II entstanden; Tabelle und Ursachenketten können als Hausaufgabe vollendet werden.</li>
+    <li><b>Lehrplanabgleich:</b> Stundenanzahl und Formulierungen bitte vor dem Einsatz noch einmal am LehrplanPLUS Geographie 12 (erhöhtes Anforderungsniveau) prüfen.</li>
+    <li><b>Einordnung:</b> Die nächste Stunde (Folgen am Raumbeispiel Indien, M5 Monsunvariabilität) kann als Ko-Konstruktion in Gruppen gestaltet werden.</li>
+  </ul>
+</section>
+
+<button id="pdf-btn" onclick="window.print()">PDF/Drucken (A4)</button>
+</body>
+</html>
